@@ -1,0 +1,20 @@
+{
+  "name": "guruparampara-clinic",
+  "version": "1.0.0",
+  "description": "Shree Vishva Ayurved Clinic website with eBook flow and admin panel",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

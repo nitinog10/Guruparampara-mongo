@@ -1,0 +1,929 @@
+<<<<<<< HEAD
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %> | Guru Parampara</title>
+    <meta name="description" content="Read our comprehensive Ayurvedic eBook - Free guide to holistic wellness and traditional healing practices.">
+    <meta name="theme-color" content="#1a5f3a">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="/public/css/styles.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/logo.jpeg">
+    
+    <style>
+        .ebook-container {
+            min-height: calc(100vh - 200px);
+            padding: 2rem 0;
+        }
+        
+        .ebook-header {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .ebook-title {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ebook-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .pdf-viewer-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .pdf-viewer-wrapper {
+            width: 100%;
+            height: calc(100vh - 350px);
+            min-height: 600px;
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .pdf-viewer-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        .ebook-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-fullscreen {
+            background: var(--accent);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-fullscreen:hover {
+            background: var(--accent-glow);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .ebook-title {
+                font-size: 1.5rem;
+            }
+            
+            .pdf-viewer-wrapper {
+                height: calc(100vh - 400px);
+                min-height: 500px;
+            }
+            
+            .ebook-actions {
+                flex-direction: column;
+            }
+            
+            .btn-fullscreen {
+                width: 100%;
+            }
+        }
+        
+        .loading-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Protection Styles */
+        .pdf-viewer-wrapper,
+        .pdf-viewer-container,
+        .ebook-container {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .pdf-viewer-wrapper iframe {
+            pointer-events: auto;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body.ebook-page {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body.ebook-page * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+        }
+        
+        /* Disable drag and drop */
+        .pdf-viewer-wrapper,
+        .pdf-viewer-container {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+        }
+        
+        /* Protection overlay */
+        .protection-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999999;
+            pointer-events: none;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="ebook-page">
+    <!-- Protection Overlay -->
+    <div class="protection-overlay" id="protectionOverlay"></div>
+    
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Navigation -->
+    <%- include('partials/header') %>
+
+    <!-- eBook Section -->
+    <section class="section-enhanced">
+        <div class="container">
+            <div class="ebook-container">
+                <div class="ebook-header fade-in">
+                    <h1 class="ebook-title">📖 Our Ayurvedic eBook</h1>
+                    <p class="ebook-subtitle">Discover the wisdom of traditional Ayurvedic healing and holistic wellness practices</p>
+                </div>
+                
+                <div class="pdf-viewer-container fade-in">
+                    <div class="pdf-viewer-wrapper">
+                        <iframe 
+                            id="pdfViewer"
+                            src="/images/ebook.pdf#toolbar=1&navpanes=1&scrollbar=1" 
+                            title="Ayurvedic eBook PDF" 
+                            allow="autoplay"
+                            loading="eager">
+                            <div class="loading-message">
+                                <p>Loading PDF viewer...</p>
+                                <p class="text-muted mt-2">If the PDF does not load, please refresh the page.</p>
+                            </div>
+                        </iframe>
+                    </div>
+                    
+                    <div class="ebook-actions">
+                        <button class="btn btn-fullscreen" id="fullscreenBtn" onclick="toggleFullscreen()">
+                            🔍 Fullscreen View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="/public/js/main.js"></script>
+    
+    <script>
+        // ========== PROTECTION AGAINST SCREENSHOTS, SCREEN SHARING, AND RECORDING ==========
+        
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable keyboard shortcuts for screenshots and developer tools
+        document.addEventListener('keydown', function(e) {
+            // Disable Print Screen
+            if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable F12 (Developer Tools)
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+C (Inspect Element)
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+S (Save Page)
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+P (Print)
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+A (Select All)
+            if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+C (Copy)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Windows+Shift+S (Snipping Tool on Windows)
+            if (e.key === 's' && e.shiftKey && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                return false;
+            }
+        }, false);
+        
+        // Disable text selection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable drag and drop
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable copy
+        document.addEventListener('copy', function(e) {
+            e.clipboardData.setData('text/plain', '');
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable cut
+        document.addEventListener('cut', function(e) {
+            e.clipboardData.setData('text/plain', '');
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Detect screen sharing attempts (if browser supports it)
+        if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+            const originalGetDisplayMedia = navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);
+            navigator.mediaDevices.getDisplayMedia = function() {
+                console.warn('Screen sharing is not allowed on this page');
+                return Promise.reject(new Error('Screen sharing is disabled'));
+            };
+        }
+        
+        // Detect if page loses focus (possible screenshot/recording)
+        let blurCount = 0;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                blurCount++;
+                if (blurCount > 3) {
+                    // Multiple rapid focus losses might indicate screenshot attempts
+                    console.warn('Multiple focus losses detected');
+                }
+            } else {
+                blurCount = 0;
+            }
+        });
+        
+        // Disable developer tools detection
+        let devtools = {open: false, orientation: null};
+        const threshold = 160;
+        setInterval(function() {
+            if (window.outerHeight - window.innerHeight > threshold || 
+                window.outerWidth - window.innerWidth > threshold) {
+                if (!devtools.open) {
+                    devtools.open = true;
+                    // Developer tools detected - you can redirect or show warning
+                    console.warn('Developer tools detected');
+                    // Optionally redirect: window.location.href = '/ebook-access';
+                }
+            } else {
+                if (devtools.open) {
+                    devtools.open = false;
+                }
+            }
+        }, 500);
+        
+        // Disable console
+        (function() {
+            const noop = function() {};
+            const methods = ['log', 'debug', 'info', 'warn', 'error', 'assert', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'count', 'trace', 'profile', 'profileEnd'];
+            methods.forEach(function(method) {
+                window.console[method] = noop;
+            });
+        })();
+        
+        // Disable image right-click and drag
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(function(img) {
+                img.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+                img.addEventListener('dragstart', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        });
+        
+        // Disable iframe content selection
+        window.addEventListener('load', function() {
+            const iframe = document.getElementById('pdfViewer');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.document.addEventListener('contextmenu', function(e) {
+                        e.preventDefault();
+                        return false;
+                    });
+                } catch (e) {
+                    // Cross-origin restrictions may prevent this
+                }
+            }
+        });
+        
+        // ========== FULLSCREEN FUNCTIONALITY ==========
+        function toggleFullscreen() {
+            const iframe = document.getElementById('pdfViewer');
+            const container = iframe.closest('.pdf-viewer-wrapper');
+            
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+        
+        // Update fullscreen button text
+        document.addEventListener('fullscreenchange', function() {
+            const btn = document.getElementById('fullscreenBtn');
+            if (document.fullscreenElement) {
+                btn.textContent = '❌ Exit Fullscreen';
+            } else {
+                btn.textContent = '🔍 Fullscreen View';
+            }
+        });
+        
+        // Handle PDF load errors
+        const iframe = document.getElementById('pdfViewer');
+        iframe.onerror = function() {
+            console.error('PDF failed to load');
+        };
+    </script>
+</body>
+</html>
+=======
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %> | Guru Parampara</title>
+    <meta name="description" content="Read our comprehensive Ayurvedic eBook - Free guide to holistic wellness and traditional healing practices.">
+    <meta name="theme-color" content="#1a5f3a">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="/public/css/styles.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/logo.jpeg">
+    
+    <style>
+        .ebook-container {
+            min-height: calc(100vh - 200px);
+            padding: 2rem 0;
+        }
+        
+        .ebook-header {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .ebook-title {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ebook-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .pdf-viewer-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .pdf-viewer-wrapper {
+            width: 100%;
+            height: calc(100vh - 350px);
+            min-height: 600px;
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .pdf-viewer-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        .ebook-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-fullscreen {
+            background: var(--accent);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-fullscreen:hover {
+            background: var(--accent-glow);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .ebook-title {
+                font-size: 1.5rem;
+            }
+            
+            .pdf-viewer-wrapper {
+                height: calc(100vh - 400px);
+                min-height: 500px;
+            }
+            
+            .ebook-actions {
+                flex-direction: column;
+            }
+            
+            .btn-fullscreen {
+                width: 100%;
+            }
+        }
+        
+        .loading-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Protection Styles */
+        .pdf-viewer-wrapper,
+        .pdf-viewer-container,
+        .ebook-container {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .pdf-viewer-wrapper iframe {
+            pointer-events: auto;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body.ebook-page {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body.ebook-page * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+        }
+        
+        /* Disable drag and drop */
+        .pdf-viewer-wrapper,
+        .pdf-viewer-container {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+        }
+        
+        /* Protection overlay */
+        .protection-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999999;
+            pointer-events: none;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="ebook-page">
+    <!-- Protection Overlay -->
+    <div class="protection-overlay" id="protectionOverlay"></div>
+    
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Navigation -->
+    <%- include('partials/header') %>
+
+    <!-- eBook Section -->
+    <section class="section-enhanced">
+        <div class="container">
+            <div class="ebook-container">
+                <div class="ebook-header fade-in">
+                    <h1 class="ebook-title">📖 Our Ayurvedic eBook</h1>
+                    <p class="ebook-subtitle">Discover the wisdom of traditional Ayurvedic healing and holistic wellness practices</p>
+                </div>
+                
+                <div class="pdf-viewer-container fade-in">
+                    <div class="pdf-viewer-wrapper">
+                        <iframe 
+                            id="pdfViewer"
+                            src="/images/ebook.pdf#toolbar=1&navpanes=1&scrollbar=1" 
+                            title="Ayurvedic eBook PDF" 
+                            allow="autoplay"
+                            loading="eager">
+                            <div class="loading-message">
+                                <p>Loading PDF viewer...</p>
+                                <p class="text-muted mt-2">If the PDF does not load, please refresh the page.</p>
+                            </div>
+                        </iframe>
+                    </div>
+                    
+                    <div class="ebook-actions">
+                        <button class="btn btn-fullscreen" id="fullscreenBtn" onclick="toggleFullscreen()">
+                            🔍 Fullscreen View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="/public/js/main.js"></script>
+    
+    <script>
+        // ========== PROTECTION AGAINST SCREENSHOTS, SCREEN SHARING, AND RECORDING ==========
+        
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable keyboard shortcuts for screenshots and developer tools
+        document.addEventListener('keydown', function(e) {
+            // Disable Print Screen
+            if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable F12 (Developer Tools)
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+C (Inspect Element)
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+S (Save Page)
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+P (Print)
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+A (Select All)
+            if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+C (Copy)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Windows+Shift+S (Snipping Tool on Windows)
+            if (e.key === 's' && e.shiftKey && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                return false;
+            }
+        }, false);
+        
+        // Disable text selection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable drag and drop
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable copy
+        document.addEventListener('copy', function(e) {
+            e.clipboardData.setData('text/plain', '');
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Disable cut
+        document.addEventListener('cut', function(e) {
+            e.clipboardData.setData('text/plain', '');
+            e.preventDefault();
+            return false;
+        }, false);
+        
+        // Detect screen sharing attempts (if browser supports it)
+        if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+            const originalGetDisplayMedia = navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);
+            navigator.mediaDevices.getDisplayMedia = function() {
+                console.warn('Screen sharing is not allowed on this page');
+                return Promise.reject(new Error('Screen sharing is disabled'));
+            };
+        }
+        
+        // Detect if page loses focus (possible screenshot/recording)
+        let blurCount = 0;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                blurCount++;
+                if (blurCount > 3) {
+                    // Multiple rapid focus losses might indicate screenshot attempts
+                    console.warn('Multiple focus losses detected');
+                }
+            } else {
+                blurCount = 0;
+            }
+        });
+        
+        // Disable developer tools detection
+        let devtools = {open: false, orientation: null};
+        const threshold = 160;
+        setInterval(function() {
+            if (window.outerHeight - window.innerHeight > threshold || 
+                window.outerWidth - window.innerWidth > threshold) {
+                if (!devtools.open) {
+                    devtools.open = true;
+                    // Developer tools detected - you can redirect or show warning
+                    console.warn('Developer tools detected');
+                    // Optionally redirect: window.location.href = '/ebook-access';
+                }
+            } else {
+                if (devtools.open) {
+                    devtools.open = false;
+                }
+            }
+        }, 500);
+        
+        // Disable console
+        (function() {
+            const noop = function() {};
+            const methods = ['log', 'debug', 'info', 'warn', 'error', 'assert', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'count', 'trace', 'profile', 'profileEnd'];
+            methods.forEach(function(method) {
+                window.console[method] = noop;
+            });
+        })();
+        
+        // Disable image right-click and drag
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(function(img) {
+                img.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+                img.addEventListener('dragstart', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        });
+        
+        // Disable iframe content selection
+        window.addEventListener('load', function() {
+            const iframe = document.getElementById('pdfViewer');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.document.addEventListener('contextmenu', function(e) {
+                        e.preventDefault();
+                        return false;
+                    });
+                } catch (e) {
+                    // Cross-origin restrictions may prevent this
+                }
+            }
+        });
+        
+        // ========== FULLSCREEN FUNCTIONALITY ==========
+        function toggleFullscreen() {
+            const iframe = document.getElementById('pdfViewer');
+            const container = iframe.closest('.pdf-viewer-wrapper');
+            
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+        
+        // Update fullscreen button text
+        document.addEventListener('fullscreenchange', function() {
+            const btn = document.getElementById('fullscreenBtn');
+            if (document.fullscreenElement) {
+                btn.textContent = '❌ Exit Fullscreen';
+            } else {
+                btn.textContent = '🔍 Fullscreen View';
+            }
+        });
+        
+        // Handle PDF load errors
+        const iframe = document.getElementById('pdfViewer');
+        iframe.onerror = function() {
+            console.error('PDF failed to load');
+        };
+    </script>
+</body>
+</html>
+>>>>>>> 0a3a1db6e046d8b0e488c57522dd7cade99a3cb6

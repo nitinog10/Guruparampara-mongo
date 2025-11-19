@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: guru-parampara-clinic
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Add these environment variables in Render dashboard:
+      # - MONGO_URI (MongoDB Atlas connection string) mongodb+srv://admin:GuruParampara@2025!@nitin-10.ixkxccg.mongodb.net/GuruParampara?appName=Nitin-10
+      # - SESSION_SECRET (generate: openssl rand -base64 32) f29izgCmpWXvT08YpN8xmtqyH6odsilN
+      # - ADMIN_USER
+      # - ADMIN_PASS
+      # PORT is automatically set by Render, don't override it
+    healthCheckPath: /
