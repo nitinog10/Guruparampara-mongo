@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 # Guruparampara-mongo
 =======
-<<<<<<< HEAD
+
 # Shree Vishva Ayurved Clinic — GuruParampara
 
 A modern Ayurvedic clinic website with eBook access flow and admin dashboard for managing user submissions.
